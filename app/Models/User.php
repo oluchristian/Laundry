@@ -3,16 +3,21 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    protected $keyType = 'string';
+
+    protected $KeyType = 'string';
     public $incrementing = false;
+
+   
 
     /**
      * The attributes that are mass assignable.
@@ -22,9 +27,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'phone',
         'address',
-        'phone'
+        'password',
     ];
 
     /**
@@ -38,21 +43,21 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
-    
 
     protected static function boot()
     {
         parent::boot();
-        static::creating(function ($model){
-            $model->{$model->getKeyName()} = (string) \Illuminate\Support\Str::uuid();
+        static::creating(function ($model) {
+            $model->{$model->getKeyName()} = Str::uuid()->toString();
         });
     }
+
+    
 }

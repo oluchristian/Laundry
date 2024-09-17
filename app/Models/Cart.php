@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -10,39 +11,23 @@ class Cart extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
+    protected $KeyType = 'string';
     public $incrementing = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'service_quantity',
         'service_price',
         'user_address',
         'user_email',
         'user_phone'
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+];
+    
 
     protected static function boot()
     {
         parent::boot();
-        static::creating(function ($model){
-            $model->id = (string) Str::uuid();
+        static::creating(function ($model) {
+            $model->{$model->getKeyName()} = Str::uuid()->toString();
         });
     }
 
@@ -56,4 +41,12 @@ class Cart extends Model
     {
         return $this->service_quantity * $this->service->price;
     }
+
+    // public function getTotalPrice()
+    // {
+    //     $totalPrice = $this::where('user_id', Auth::id())->get();
+    //     // return $totalPrice->sum('service_price');
+    // }
+
+
 }

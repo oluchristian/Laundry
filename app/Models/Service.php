@@ -10,14 +10,9 @@ class Service extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
+    protected $KeyType = 'string';
     public $incrementing = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'title',
         'description',
@@ -26,22 +21,11 @@ class Service extends Model
         'discount_price',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-
-    protected static function boot()
+    protected static function boot ()
     {
         parent::boot();
-        static::creating(function ($model){
+
+        static::creating(function ($model) {
             $model->id = (string) Str::uuid();
         });
     }
